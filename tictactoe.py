@@ -65,7 +65,7 @@ def main():
 	## if the spot user wants is not there (already taken), or is already X or O, make them try again
 
 	if isTakenN == 0 or placeOnBoard == "X" or placeOnBoard == "O":
-		input("\nTry again, Place is taken, press ENTER")
+		input("\nTry again, Place is taken, press ENTER") 
 		main()
 
 	else:
