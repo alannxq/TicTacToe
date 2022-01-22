@@ -81,4 +81,4 @@ def main():
 	else:
 		main() ## if not draw (9 plays), keep going
 		
-main() ## initiate game
+main() ## initiate game 
