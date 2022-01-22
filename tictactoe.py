@@ -6,20 +6,20 @@ count = 0 ## used to check if it's X's or O's turn
 
 solution = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 xPlays = []
-yPlays = []
+oPlays = []
 
 def checkWin():
-	global solution, xPlays, yPlays
+	global solution, xPlays, oPlays
 
 	for rows in solution:
 		if xPlays == rows:
 			#clear()
 			#print("X Wins")
 			return "X Wins"
-		elif yPlays == rows:
+		elif oPlays == rows:
 			#clear()
-			#print("Y Wins")
-			return "Y Wins"
+			#print("O Wins")
+			return "O Wins"
 
 def clear():
 	if platform.system() == "Windows":
@@ -33,15 +33,15 @@ gameMechanicChoice = input("Play using (c)oordinates or (n)umbers?\n\n> ")
 
 
 def main():
-	global board, count, xPlays, yPlays
+	global board, count, xPlays, oPlays
 
 	clear() ## another clear to wipe gameMechanicChoice
 
 	if checkWin() == "X Wins":
 		print("X Wins")
 		return
-	elif checkWin() == "Y Wins":
-		print("Y wins")
+	elif checkWin() == "O Wins":
+		print("O Wins")
 		return
 
 	symbol = "X" if count % 2 == 0 else "O" ## count is going up every round, count is odd = X's turn, count is even = O's turn
@@ -56,7 +56,7 @@ def main():
 	-----------
 	 {board[2][0]} | {board[2][1]} | {board[2][2]}''')
 
-		#print(xPlays, yPlays) ### uncomment for debug
+		#print(xPlays, oPlays) ### uncomment for debug
 
 
 	showBoard() ## shows board every round
@@ -112,8 +112,8 @@ def main():
 			xPlays.sort()
 
 		else:
-			yPlays.append(placeOnBoard)
-			yPlays.sort()
+			oPlays.append(placeOnBoard)
+			oPlays.sort()
 
 
 	if count == 9: ## if we played 9 rounds, make it a draw
@@ -122,5 +122,5 @@ def main():
 		print("\nDRAW")
 	else:
 		main() ## if not draw (9 plays), keep going
-	
+		
 main() ## initiate game 
