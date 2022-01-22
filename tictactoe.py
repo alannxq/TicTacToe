@@ -1,11 +1,15 @@
 import os ## to clear
+import platform
 
 board = [[1,2,3],[4,5,6],[7,8,9]]
 count = 0 ## used to check if it's X's or O's turn
 
 
 def clear():
-	os.system("clear")
+	if platform.system() == "Windows":
+		os.system("cls")
+	else:
+		os.system("cls")
 
 clear() ## making terminal clear on start
 
