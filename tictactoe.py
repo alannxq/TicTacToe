@@ -1,3 +1,6 @@
+## Alan's very cool Tic Tac Toe game
+## discord; alan#1000
+
 import os ## to clear
 import platform
 
