@@ -9,7 +9,7 @@ def clear():
 	if platform.system() == "Windows":
 		os.system("cls")
 	else:
-		os.system("cls")
+		os.system("clear")
 
 clear() ## making terminal clear on start
 
