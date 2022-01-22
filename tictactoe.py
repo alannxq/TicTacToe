@@ -4,6 +4,22 @@ import platform
 board = [[1,2,3],[4,5,6],[7,8,9]]
 count = 0 ## used to check if it's X's or O's turn
 
+solution = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+xPlays = []
+yPlays = []
+
+def checkWin():
+	global solution, xPlays, yPlays
+
+	for rows in solution:
+		if xPlays == rows:
+			#clear()
+			#print("X Wins")
+			return "X Wins"
+		elif yPlays == rows:
+			#clear()
+			#print("Y Wins")
+			return "Y Wins"
 
 def clear():
 	if platform.system() == "Windows":
@@ -17,9 +33,16 @@ gameMechanicChoice = input("Play using (c)oordinates or (n)umbers?\n\n> ")
 
 
 def main():
-	global board, count
+	global board, count, xPlays, yPlays
 
 	clear() ## another clear to wipe gameMechanicChoice
+
+	if checkWin() == "X Wins":
+		print("X Wins")
+		return
+	elif checkWin() == "Y Wins":
+		print("Y wins")
+		return
 
 	symbol = "X" if count % 2 == 0 else "O" ## count is going up every round, count is odd = X's turn, count is even = O's turn
 
@@ -33,12 +56,19 @@ def main():
 	-----------
 	 {board[2][0]} | {board[2][1]} | {board[2][2]}''')
 
+		#print(xPlays, yPlays) ### uncomment for debug
 
 
 	showBoard() ## shows board every round
 
+
 	if gameMechanicChoice == "n":
-		placeOnBoard = int(input("Number: "))
+		try:
+			placeOnBoard = int(input("Number: "))
+		except:
+			clear()
+			input("You didn't enter a number, press ENTER to try again.")
+			main()
 
 	else: ## if game input wasnt numbers, use co-ordinates 
 		x = int(input("X: "))
@@ -53,6 +83,10 @@ def main():
 
 		placeOnBoard = board[y][x] ## specifying which item the user wants
 
+
+
+	
+
 	isTakenN = 0 ## checks to see if the place on board is taken, for numbers
 	isTakenCo = 0 ## checks to see if the place on board is taken, for co-ordinates
 
@@ -65,13 +99,21 @@ def main():
 	## if the spot user wants is not there (already taken), or is already X or O, make them try again
 
 	if isTakenN == 0 or placeOnBoard == "X" or placeOnBoard == "O":
-		input("\nTry again, Place is taken, press ENTER") 
+		input("\nNot valid spot, press ENTER") 
 		main()
 
 	else:
 		## overwrite board with everything that was there before, except from thing we chose, we make that our symbol instead
 		board = [[i if i != placeOnBoard else symbol for i in rows]for rows in board]
 		count += 1
+
+		if symbol == "X":
+			xPlays.append(placeOnBoard)
+			xPlays.sort()
+
+		else:
+			yPlays.append(placeOnBoard)
+			yPlays.sort()
 
 
 	if count == 9: ## if we played 9 rounds, make it a draw
