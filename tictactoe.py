@@ -7,7 +7,15 @@ count = 0 ## used to check if it's X's or O's turn
 solution = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 xPlays = []
 oPlays = []
-
+def numTutorial():
+	clear()
+	print('''Boxes will be empty, but to pick them type the corresponding number like shown below:
+	
+1 2 3
+4 5 6
+7 8 9
+''') 
+	input("Press ENTER to continue.")
 def checkWin():
 	global solution, xPlays, oPlays
 
@@ -31,6 +39,7 @@ clear() ## making terminal clear on start
 
 gameMechanicChoice = input("Play using (c)oordinates or (n)umbers?\n\n> ")
 
+numTutorial()
 
 def main():
 	global board, count, xPlays, oPlays
@@ -48,15 +57,29 @@ def main():
 
 	print(f"{symbol}'s Turn.")
 
-	def showBoard():
-		print(f'''
-	 {board[0][0]} | {board[0][1]} | {board[0][2]}
-	-----------
-	 {board[1][0]} | {board[1][1]} | {board[1][2]}
-	-----------
-	 {board[2][0]} | {board[2][1]} | {board[2][2]}''')
+	def numCheck(y, x):
+		if board[y][x] == "X" or board[y][x] == "O":
+			return board[y][x]
+		else:
+			return ' '
 
-		#print(xPlays, oPlays) ### uncomment for debug
+
+	def showBoard():
+	# 	print(f'''
+	#  {board[0][0]} | {board[0][1]} | {board[0][2]}
+	# -----------
+	#  {board[1][0]} | {board[1][1]} | {board[1][2]}
+	# -----------
+	#  {board[2][0]} | {board[2][1]} | {board[2][2]}''')
+		print(f'''
+ {numCheck(0, 0)} | {numCheck(0, 1)} | {numCheck(0, 2)}
+-----------
+ {numCheck(1, 0)} | {numCheck(1, 1)} | {numCheck(1, 2)}
+-----------
+ {numCheck(2, 0)} | {numCheck(2, 1)} | {numCheck(2, 2)}
+ ''')
+
+
 
 
 	showBoard() ## shows board every round
