@@ -122,5 +122,5 @@ def main():
 		print("\nDRAW")
 	else:
 		main() ## if not draw (9 plays), keep going
-		
+	
 main() ## initiate game 
