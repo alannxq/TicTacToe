@@ -1,11 +1,37 @@
-## Alan's very cool Tic Tac Toe game
-## discord; alan#1000
-
-import os ## to clear
+import os
 import platform
+import socket
+
+def clear():
+	if platform.system() == "Windows":
+		os.system("cls")
+	else:
+		os.system("clear")
+
+clear()
+
+hostOrConnect = input("Select (A/B):\n\na) Host game\nb) Join game\n\n> ").lower()
+
+if hostOrConnect == "a":
+	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+	PORT = int(input("Pick a port: "))
+
+	server.bind(("0.0.0.0", PORT))
+	print("Waiting for a connection...")
+	server.listen()
+	client, addr = server.accept()
+	count = 1 ## used to check if it's X's or O's turn
+
+elif hostOrConnect == "b":
+	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	HOST = input("Enter host server: ")
+	PORT = int(input("Enter port: "))
+	client.connect((HOST, PORT))
+	count = 0 ## used to check if it's X's or O's turn
 
 board = [[1,2,3],[4,5,6],[7,8,9]]
-count = 0 ## used to check if it's X's or O's turn
+
 
 solution = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 xPlays = []
@@ -32,17 +58,15 @@ def checkWin():
 			#print("O Wins")
 			return "O Wins"
 
-def clear():
-	if platform.system() == "Windows":
-		os.system("cls")
-	else:
-		os.system("clear")
 
 clear() ## making terminal clear on start
 
-gameMechanicChoice = input("Play using (c)oordinates or (n)umbers?\n\n> ")
+#gameMechanicChoice = input("Play using (c)oordinates or (n)umbers?\n\n> ")
+gameMechanicChoice = "n"
 
-numTutorial()
+## i have not implemented online yet for coordinates, either way, coords arent completed yet.
+
+#numTutorial()
 
 def main():
 	global board, count, xPlays, oPlays
@@ -58,7 +82,11 @@ def main():
 
 	symbol = "X" if count % 2 == 0 else "O" ## count is going up every round, count is odd = X's turn, count is even = O's turn
 
-	print(f"{symbol}'s Turn.")
+	if symbol == "X":
+		whosTurn = "Your"
+	else:
+		whosTurn = "Enemies"
+	print(f"{whosTurn} Turn: ({symbol})")
 
 	def numCheck(y, x):
 		if board[y][x] == "X" or board[y][x] == "O":
@@ -68,12 +96,6 @@ def main():
 
 
 	def showBoard():
-	# 	print(f'''
-	#  {board[0][0]} | {board[0][1]} | {board[0][2]}
-	# -----------
-	#  {board[1][0]} | {board[1][1]} | {board[1][2]}
-	# -----------
-	#  {board[2][0]} | {board[2][1]} | {board[2][2]}''')
 		print(f'''
  {numCheck(0, 0)} | {numCheck(0, 1)} | {numCheck(0, 2)}
 -----------
@@ -90,7 +112,22 @@ def main():
 
 	if gameMechanicChoice == "n":
 		try:
-			placeOnBoard = int(input("Number: "))
+			if symbol == "X":
+				done = False
+				while not done:
+					placeOnBoard = input("Your Turn: ")
+					client.send(placeOnBoard.encode("utf-8"))
+					placeOnBoard = int(placeOnBoard)
+					done = True
+			else:
+				done = False
+				while not done:
+					msg = client.recv(1024).decode("utf-8")
+
+					placeOnBoard = int(msg)
+					done = True
+
+			#client.send(input("Message: ").encode("utf-8"))
 		except:
 			clear()
 			input("You didn't enter a number, press ENTER to try again.")
