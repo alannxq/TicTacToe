@@ -1,5 +1,5 @@
 # Game
-Bloated Tic-Tac-Toe game
+ONLINE HAS BEEN ADDED!!!!
 
 # Why can i not win?
-now you can, its fixed
+now you can, its fixed, kinda
