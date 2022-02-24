@@ -20,12 +20,10 @@ if hostOrConnect == "a":
     NAME = input("Pick a name: ")
     PORT = input("Pick a port: ")
     INT_PORT = int(PORT)
-    #server.bind(("0.0.0.0", INT_PORT))
-    r = requests.post(f"http://ssh.lejeff.com:5000/game/{NAME}/{PORT}")
-    #print(r.json())
     server.bind(("0.0.0.0", INT_PORT))
-    print("Waiting for someone to join...")
     server.listen()
+    r = requests.post(f"http://ssh.lejeff.com:5000/game/{NAME}/{PORT}")
+    print("Waiting for someone to join...")
     client, addr = server.accept()
     count = 1 ## used to check if it's X's or O's turn
 
