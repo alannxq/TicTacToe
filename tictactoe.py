@@ -30,12 +30,11 @@ elif hostOrConnect == "b":
 	client.connect((HOST, PORT))
 	count = 0 ## used to check if it's X's or O's turn
 
-board = [[1,2,3],[4,5,6],[7,8,9]]
+board = [[7,8,9],[4,5,6],[1,2,3]]
 
 
-solution = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
-xPlays = []
-oPlays = []
+solution = [[[0,0],[0,1],[0,2]],[[1,0],[1,1],[1,2]],[[2,0],[2,1],[2,2]],[[0,0],[1,0],[2,0]],[[0,1],[1,1],[2,1]],[[0,2],[1,2],[2,2]],[[0,0],[1,1],[2,2]],[[0,2],[1,1],[2,0]]] 
+
 def numTutorial():
 	clear()
 	print('''Boxes will be empty, but to pick them type the corresponding number like shown below:
@@ -46,18 +45,18 @@ def numTutorial():
 ''') 
 	input("Press ENTER to continue.")
 def checkWin():
-	global solution, xPlays, oPlays
+    global solution, board
 
-	for rows in solution:
-		if xPlays == rows:
-			#clear()
-			#print("X Wins")
-			return "X Wins"
-		elif oPlays == rows:
-			#clear()
-			#print("O Wins")
-			return "O Wins"
-
+    for i in solution:
+        if board[i[0][0]][i[0][1]] == "X" and board[i[1][0]][i[1][1]] == "X" and board[i[2][0]][i[2][1]] == "X":
+            return "X Wins"
+            break
+        elif board[i[0][0]][i[0][1]] == "O" and board[i[1][0]][i[1][1]] == "O" and board[i[2][0]][i[2][1]] == "O":
+            return "O Wins"
+            break
+        else:
+            continue
+            
 
 clear() ## making terminal clear on start
 
@@ -69,34 +68,34 @@ gameMechanicChoice = "n"
 #numTutorial()
 
 def main():
-	global board, count, xPlays, oPlays
+    global board, count
 
-	clear() ## another clear to wipe gameMechanicChoice
+    clear() ## another clear to wipe gameMechanicChoice
 
-	if checkWin() == "X Wins":
-		print("X Wins")
-		return
-	elif checkWin() == "O Wins":
-		print("O Wins")
-		return
+    if checkWin() == "X Wins":
+        print("You win!")
+        return
+    elif checkWin() == "O Wins":
+        print("Enemy wins!")
+        return
 
-	symbol = "X" if count % 2 == 0 else "O" ## count is going up every round, count is odd = X's turn, count is even = O's turn
+    symbol = "X" if count % 2 == 0 else "O" ## count is going up every round, count is odd = X's turn, count is even = O's turn
 
-	if symbol == "X":
-		whosTurn = "Your"
-	else:
-		whosTurn = "Enemies"
-	print(f"{whosTurn} Turn: ({symbol})")
+    if symbol == "X":
+        whosTurn = "Your"
+    else:
+        whosTurn = "Enemies"
+    print(f"{whosTurn} Turn: ({symbol})")
 
-	def numCheck(y, x):
-		if board[y][x] == "X" or board[y][x] == "O":
-			return board[y][x]
-		else:
-			return ' '
+    def numCheck(y, x):
+        if board[y][x] == "X" or board[y][x] == "O":
+            return board[y][x]
+        else:
+            return ' '
 
 
-	def showBoard():
-		print(f'''
+    def showBoard():
+        print(f'''
  {numCheck(0, 0)} | {numCheck(0, 1)} | {numCheck(0, 2)}
 -----------
  {numCheck(1, 0)} | {numCheck(1, 1)} | {numCheck(1, 2)}
@@ -107,83 +106,73 @@ def main():
 
 
 
-	showBoard() ## shows board every round
+    showBoard() ## shows board every round
 
 
-	if gameMechanicChoice == "n":
-		try:
-			if symbol == "X":
-				done = False
-				while not done:
-					placeOnBoard = input("Your Turn: ")
-					client.send(placeOnBoard.encode("utf-8"))
-					placeOnBoard = int(placeOnBoard)
-					done = True
-			else:
-				done = False
-				while not done:
-					msg = client.recv(1024).decode("utf-8")
+    if gameMechanicChoice == "n":
+        try:
+            if symbol == "X":
+                done = False
+                while not done:
+                    placeOnBoard = input("Your Turn: ")
+                    client.send(placeOnBoard.encode("utf-8"))
+                    placeOnBoard = int(placeOnBoard)
+                    done = True
+            else:
+                done = False
+                while not done:
+                    msg = client.recv(1024).decode("utf-8")
 
-					placeOnBoard = int(msg)
-					done = True
+                    placeOnBoard = int(msg)
+                    done = True
 
 			#client.send(input("Message: ").encode("utf-8"))
-		except:
-			clear()
-			input("You didn't enter a number, press ENTER to try again.")
-			main()
+        except:
+            clear()
+            input("You didn't enter a number, press ENTER to try again.")
+            main()
 
-	else: ## if game input wasnt numbers, use co-ordinates 
-		x = int(input("X: "))
-		y = int(input("Y: "))
-		x -= 1 ## 0 is first item in python, therefore if someone picks 3, 1 needs to be taken away to make it easier to use
-		y -= 1
+    else: ## if game input wasnt numbers, use co-ordinates 
+        x = int(input("X: "))
+        y = int(input("Y: "))
+        x -= 1 ## 0 is first item in python, therefore if someone picks 3, 1 needs to be taken away to make it easier to use
+        y -= 1
 
-		if y == 2: ## y co-ordinate goes top to bottom, switching it around here
-			y = 0
-		elif y == 0:
-			y = 2
-
-		placeOnBoard = board[y][x] ## specifying which item the user wants
+        if y == 2: ## y co-ordinate goes top to bottom, switching it around here
+            y = 0
+        elif y == 0:
+            y = 2
+        placeOnBoard = board[y][x] ## specifying which item the user wants
 
 
 
 	
 
-	isTakenN = 0 ## checks to see if the place on board is taken, for numbers
-	isTakenCo = 0 ## checks to see if the place on board is taken, for co-ordinates
+    isTakenN = 0 ## checks to see if the place on board is taken, for numbers
+    isTakenCo = 0 ## checks to see if the place on board is taken, for co-ordinates
 
-	for rows in board: 
-		for i in rows:
-			if i == placeOnBoard:
-				isTakenN += 1 ## cant check co-ordinates on number mechanic, so we go through entire board checking is exists
+    for rows in board: 
+        for i in rows:
+            if i == placeOnBoard:
+                isTakenN += 1 ## cant check co-ordinates on number mechanic, so we go through entire board checking is exists
 
 
 	## if the spot user wants is not there (already taken), or is already X or O, make them try again
 
-	if isTakenN == 0 or placeOnBoard == "X" or placeOnBoard == "O":
-		input("\nNot valid spot, press ENTER") 
-		main()
+    if isTakenN == 0 or placeOnBoard == "X" or placeOnBoard == "O":
+        input("\nNot valid spot, press ENTER") 
+        main()
 
-	else:
+    else:
 		## overwrite board with everything that was there before, except from thing we chose, we make that our symbol instead
-		board = [[i if i != placeOnBoard else symbol for i in rows]for rows in board]
-		count += 1
+        board = [[i if i != placeOnBoard else symbol for i in rows]for rows in board]
+        count += 1
 
-		if symbol == "X":
-			xPlays.append(placeOnBoard)
-			xPlays.sort()
-
-		else:
-			oPlays.append(placeOnBoard)
-			oPlays.sort()
-
-
-	if count == 9: ## if we played 9 rounds, make it a draw
-		clear()
-		showBoard()
-		print("\nDRAW")
-	else:
-		main() ## if not draw (9 plays), keep going
+    if count == 10: ## if we played 9 rounds, make it a draw
+        clear()
+        showBoard()
+        print("\nDRAW")
+    else:
+        main() ## if not draw (9 plays), keep going
 		
 main() ## initiate game 
