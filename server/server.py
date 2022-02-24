@@ -1,4 +1,3 @@
-
 import time
 import requests
 from flask import Flask, request
@@ -22,8 +21,8 @@ class game(Resource):
       return {"None": "None"}
     finally:
       info.update({name:{"ip": request.remote_addr, "port": port}}) ##[name] = [request.remote_addr, port]
-      #time.sleep(10)
-      #info.pop(name)
+      time.sleep(10)
+      info.pop(name)
 
 
 api.add_resource(game, "/game/<string:name>/<string:port>")
