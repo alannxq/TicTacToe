@@ -22,7 +22,11 @@ if hostOrConnect == "a":
     INT_PORT = int(PORT)
     server.bind(("0.0.0.0", INT_PORT))
     server.listen()
-    r = requests.post(f"http://ssh.lejeff.com:5000/game/{NAME}/{PORT}")
+
+    def send_game_details():
+        r = requests.post(f"http://ssh.lejeff.com:5000/game/{NAME}/{PORT}")
+
+    Thread(target = send_game_details).start()
     print("Waiting for someone to join...")
     client, addr = server.accept()
     count = 1 ## used to check if it's X's or O's turn
